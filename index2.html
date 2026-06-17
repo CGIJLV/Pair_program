@@ -7,8 +7,9 @@
   </head>
   <body>
     Quantidade de cavalos: <input id="qtd_cavalos" type="text" /> <br />
-    <button onclick="exibirInputs()">Colocar nome dos cavalos</button>
+    <button onclick="exibirInputs()">Registrar quantidade de cavalos</button>
     <div id="exibir"></div>
+    <div id="exibirQtdCavalos"></div>
 
     <div id="inputs"></div>
     <div id="div_mensagem"></div>
@@ -25,11 +26,12 @@
     if (qtdCavalos < 2 || qtdCavalos > 6) {
       alert("Insira uma quantidade entre 2 até 6");
     } else {
-      exibir.innerHTML = `<input id="nome" type="text"><br><button onclick="cadastrar()">Cadastrar</button>`;
+      exibir.innerHTML = `<input id="nome" type="text"><br><button onclick="cadastrar()">Registrar nome do cavalo</button>`;  
     }
   }
 
   function cadastrar() {
+    exibirQtdCavalos.innerHTML = `${nome.value} registrado!<h3>Cavalos registrados: ${cavalos.length + 1} de ${qtd_cavalos.value}`;
     cavalos.push({
       nome: nome.value,
       tempoTotal: 0
@@ -38,9 +40,9 @@
     //só exibbe se ofor aq aunteidade
 
     if (cavalos.length == qtd_cavalos.value) {
+      exibirQtdCavalos.innerHTML = ``;
       exibir.innerHTML = `Quantidade de voltas: <input id="qtd_voltas" type="text"> <br>
-                <button onclick="largada()">Dar a LArgada</button>
-`;
+                <button onclick="largada()">Dar a Largada</button><br>`;
     }
   }
 
@@ -51,23 +53,22 @@
     let tempoAtual = 0;
 
       for (let j = 0; j < qntVoltas; j++) {
-        msg += `Volta: ${j+1}`
+        div_mensagem.innerHTML += `Volta: ${j+1}<br>`
 
-        for(let k = 0; k <= cavalos.length; k++){
+        for(let k = 0; k < cavalos.length; k++){
 
             let cavalo = cavalos[k]
-            let aleatório = (Math.random() * 2 + 7).toFixed(1);
+            let aleatorio = Number((Math.random() * 2 + 7).toFixed(1));
     
-            tempoAtual = aleatório // tempo atual!!!!!
+            tempoAtual = aleatorio // tempo atual!!!!!
             cavalo.tempoTotal += tempoAtual
 
-            cavalomsg += `${cavalo.nome} - ${aleatório} - ${cavalo.tempoTotal} <br>`;
+            div_mensagem.innerHTML += `${cavalo.nome} - ${aleatorio} - ${cavalo.tempoTotal}<br>`;
         }
-        msg += `${cavalomsg}`
+        div_mensagem.innerHTML += `<br>`
         // msg para cada cavalo de algum jeito, boa sorte!!!
         // precisa de um for para adicionar cada "nome -- tempo"
     }
-    div_mensagem.innerHTML = msg
 }
 </script> 
 <!-- so precisa exibir -->
