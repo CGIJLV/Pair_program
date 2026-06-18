@@ -1,0 +1,31 @@
+body {
+    background-image: url(backgroundIMG.jpg);
+    font-family: 'Rye', cursive;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+h2 {
+    color: #2d6a4f;
+    font-size: 28px;
+    text-shadow: 2px 2px #ffd60a;
+}
+
+h3 {
+    color: #7f4f24;
+    font-size: 20px;
+}
+
+#paginaCorrida,
+#div_pagPodio {
+    background-color: #fff8e7;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+}
