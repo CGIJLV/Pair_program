@@ -1,11 +1,15 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cavalos</title>
-  </head>
-  <body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cavalos</title>
+</head>
+
+<body>
+
+  <div id="paginaCorrida">
     Quantidade de cavalos: <input id="qtd_cavalos" type="text" /> <br />
     <button onclick="exibirInputs()">Registrar quantidade de cavalos</button>
     <div id="exibir"></div>
@@ -13,7 +17,12 @@
 
     <div id="inputs"></div>
     <div id="div_mensagem"></div>
-  </body>
+  </div>
+
+  <div id="div_pagPodio" style="display: none;"></div>
+
+</body>
+
 </html>
 
 <script>
@@ -26,7 +35,7 @@
     if (qtdCavalos < 2 || qtdCavalos > 6) {
       alert("Insira uma quantidade entre 2 até 6");
     } else {
-      exibir.innerHTML = `<input id="nome" type="text"><br><button onclick="cadastrar()">Registrar nome do cavalo</button>`;  
+      exibir.innerHTML = `<input id="nome" type="text"><br><button onclick="cadastrar()">Registrar nome do cavalo</button>`;
     }
   }
 
@@ -34,7 +43,8 @@
     exibirQtdCavalos.innerHTML = `${nome.value} registrado!<h3>Cavalos registrados: ${cavalos.length + 1} de ${qtd_cavalos.value}`;
     cavalos.push({
       nome: nome.value,
-      tempoTotal: 0
+      tempoTotal: 0,
+      voltas: [] // lista para armazenar as voltas do cavalo
     });
 
     //só exibbe se ofor aq aunteidade
@@ -52,25 +62,74 @@
     let cavalomsg = ``;
     let tempoAtual = 0;
 
-      for (let j = 0; j < qntVoltas; j++) {
-        div_mensagem.innerHTML += `Volta: ${j+1}<br>`
+    for (let j = 0; j < qntVoltas; j++) {
+      div_mensagem.innerHTML += `Volta: ${j + 1}<br>`
 
-        for(let k = 0; k < cavalos.length; k++){
+      for (let k = 0; k < cavalos.length; k++) {
 
-            let cavalo = cavalos[k]
-            let aleatorio = Number((Math.random() * 2 + 7).toFixed(1));
-    
-            tempoAtual = aleatorio // tempo atual!!!!!
-            cavalo.tempoTotal += tempoAtual
+        let cavalo = cavalos[k]
+        let aleatorio = Number((Math.random() * 2 + 7).toFixed(1));
 
-            div_mensagem.innerHTML += `${cavalo.nome} - ${aleatorio} - ${cavalo.tempoTotal}<br>`;
-        }
-        div_mensagem.innerHTML += `<br>`
-        // msg para cada cavalo de algum jeito, boa sorte!!!
-        // precisa de um for para adicionar cada "nome -- tempo"
+        tempoAtual = aleatorio // tempo atual!!!!!
+        cavalo.tempoTotal += tempoAtual
+        cavalo.voltas.push(aleatorio); // para contar a qntd de voltas de cada cavalo
+
+        div_mensagem.innerHTML += `${cavalo.nome} - ${aleatorio} - ${cavalo.tempoTotal}<br>`;
+      }
+      div_mensagem.innerHTML += `<br>`
+      // msg para cada cavalo de algum jeito, boa sorte!!!
+      // precisa de um for para adicionar cada "nome -- tempo"
     }
-}
-</script> 
+
+    div_mensagem.innerHTML += `<button onclick="verPodio()">Ver Pódio</button>`;
+  }
+
+  function verPodio() {
+    paginaCorrida.style.display = "none";
+    div_pagPodio.style.display = "block";
+
+    let podio = exibirPodio();
+
+    div_pagPodio.innerHTML = `<h2>Pódio</h2>`;
+
+    for (let i = 0; i < podio.length; i++) {
+      div_pagPodio.innerHTML += `${i + 1}º lugar - ${podio[i].nome} - ${podio[i].tempoTotal.toFixed(1)}<br>`;
+    } // passei a lógica do vini para essa funçao para conseguir exibir o podio em outra "pagina"
+  }
+
+  function exibirPodio() {
+    let podio = [];
+    let quantidadePodio = 3;
+
+    if (cavalos.length < 3) {
+      quantidadePodio = cavalos.length;
+    }
+
+    for (let posicao = 1; posicao <= quantidadePodio; posicao++) {
+      let menorTempo = 999999;
+      let melhorCavalo = null;
+
+      for (let i = 0; i < cavalos.length; i++) {
+        let cavaloJaEstaNoPodio = false;
+
+        for (let j = 0; j < podio.length; j++) {
+          if (podio[j].nome == cavalos[i].nome) {
+            cavaloJaEstaNoPodio = true;
+          }
+        }
+
+        if (cavalos[i].tempoTotal < menorTempo && cavaloJaEstaNoPodio == false) {
+          menorTempo = cavalos[i].tempoTotal;
+          melhorCavalo = cavalos[i];
+        }
+      }
+
+      podio.push(melhorCavalo);
+    }
+
+    return podio;
+  }
+</script>
 <!-- so precisa exibir -->
 
 <!-- comente ao final de toda troca!!!!! -->
